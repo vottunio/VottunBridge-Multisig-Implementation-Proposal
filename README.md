@@ -379,21 +379,32 @@ Implementing multisig positions VottunBridge as:
 
 ## 10. Payment Terms
 
+[TABLA DE MILESTONES] ← Aquí está
 | Milestone | Deliverable | Amount USD | % | Hours | QA Week | Payment Week |
 |-----------|-------------|------------|---|-------|---------|--------------|
 | M1 | Core Multisig | $4,200 | 20% | 68h | Week 2 | Week 2 |
 | M2 | Full Lifecycle | $5,250 | 25% | 85h | Week 4 | Week 4 |
 | M3 | Wallet Mgmt | $5,250 | 25% | 85h | Week 6 | Week 6 |
 | M4 | Production | $6,300 | 30% | 102h | Weeks 9-10 | Week 10 |
-| **Total** | | **$21,000** | **100%** | **340h** | | |
+| Total | | $21,000 | 100% | 340h | | |
 
-**Terms**:
-- Payments denominated in **USD**
-- Paid in **Qus** at conversion rate at time of payment
-- No upfront payment
-- Payment upon milestone delivery + QA approval
-- First payment: 20% (compliant with max 20% requirement)
-- Last payment: 30% (compliant with min 30% requirement)
+Price Calculation Breakdown
+Base Calculation:
+
+Total effort: 340 hours (235h base + 105h contingency buffer)
+Standard development rate: €85/hour
+Gross total: €28,900
+
+Cost Adjustments:
+
+Go Backend development (44h): Provided by Vottun internal team → -€5,015
+React Frontend development (15h): Provided by Vottun internal team → -€0 (already included in backend discount)
+Goodwill discount (50% reduction on contingency buffer): → -€4,462
+
+Subtotal: €19,423
+USD Conversion (at 1.08 EUR/USD exchange rate): $20,977
+Final Price: $21,000 USD (rounded, paid in Qus at time of payment)
+Note: Vottun is absorbing 59 hours of internal development effort (Go Backend + React Frontend) as part of their strategic investment in strengthening the Qubic ecosystem's security infrastructure. The technical breakdown and detailed hour allocation is available in the Technical Implementation Document.
 
 ---
 
