@@ -450,7 +450,3 @@ The project delivers:
 Total investment: $21,000 USD over 10 weeks, delivered in 4 SAFe-compliant milestones.
 
 ---
-
-**Contact**: [Your Name/Email]
-**Proposal Date**: January 2025
-**Word Count**: ~2,100 words
