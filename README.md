@@ -352,7 +352,7 @@ This implementation follows the MsVault reference model, adapting its proven mul
 
 **Final Price**: **$21,000 USD** (rounded, paid in Qus at time of payment)
 
-**Note**: Vottun is absorbing 59 hours of internal development effort (Go Backend + React Frontend) as part of their strategic investment in strengthening the Qubic ecosystem's security infrastructure. The technical breakdown and detailed hour allocation is available in the [Technical Implementation Document](Technical_Breakdown.md).
+**Note**: Vottun is absorbing 59 hours of internal development effort (Go Backend + React Frontend) as part of their strategic investment in strengthening the Qubic ecosystem's security infrastructure. The technical breakdown and detailed hour allocation is available in the [Technical Implementation Document](Technical.md).
 
 ---
 
