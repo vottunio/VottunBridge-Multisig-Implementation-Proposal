@@ -9,7 +9,6 @@ This proposal outlines the implementation of a comprehensive multisig (multi-sig
 
 **Total Investment**: $21,000 USD (paid in Qus)
 **Duration**: 10 weeks (4 milestones)
-**Team Size**: 4 specialized developers
 
 ---
 
