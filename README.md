@@ -15,39 +15,29 @@ This proposal outlines the implementation of a comprehensive multisig (multi-sig
 
 ## 2. Business Need
 
-### Current Problem
+### Current Situation
 
-VottunBridge currently operates with a **single point of failure**:
-- One admin account controls all critical operations
-- Single manager approval can execute fund transfers
-- No audit trail for decision-making
-- High risk of compromised keys leading to total fund loss
-- Lacks institutional-grade security standards required for DeFi
+VottunBridge currently operates with a **single administrator system**:
+- Single admin account (`id admin`) controls critical operations
+- Manager list allows individual manager approval for operations
+- Critical functions like `completeOrder`, `refundOrder`, and `transferToContract` require only 1 manager signature
+- Single point of failure vulnerability for fund management
 
-### Market Context
+### Problem
 
-Cross-chain bridges are the **#1 attack vector** in blockchain:
-- $2.5B+ stolen from bridges in 2022-2023
-- 90% of attacks exploited centralized control mechanisms
-- Institutional investors **require multisig** as minimum security standard
-- Regulatory frameworks (MiCA, etc.) increasingly mandate distributed control
+This architecture presents security risks:
+- Compromised admin key = complete system control
+- Single manager approval insufficient for large value transfers
+- No distributed control mechanism
+- Limited audit trail for critical decisions
 
-### Business Impact
+### Solution
 
-Without multisig, VottunBridge faces:
-- ❌ Limited institutional adoption
-- ❌ Higher insurance costs
-- ❌ Regulatory compliance risks
-- ❌ Reduced user confidence
-- ❌ Competitive disadvantage vs. secure bridges (LayerZero, Wormhole)
-
-### Opportunity
-
-Implementing multisig positions VottunBridge as:
-- ✅ Enterprise-grade secure infrastructure
-- ✅ Compliant with institutional standards
-- ✅ Attractive for high-value transfers ($1M+)
-- ✅ Reference implementation for Qubic ecosystem
+Implement a multisig wallet system similar to MsVault reference implementation:
+- Multiple owner approval requirements
+- Configurable approval thresholds (M-of-N signatures)
+- Distributed control over critical bridge operations
+- Complete approval tracking and audit trail
 
 ---
 
@@ -55,36 +45,17 @@ Implementing multisig positions VottunBridge as:
 
 ### Value Proposition
 
-**For Users**:
-- Sleep soundly: No single person can steal funds
-- Transparency: All approvals visible on-chain
-- Recoverability: Lost key ≠ lost funds
+**Enhanced Security**: Multiple signature requirements prevent single point of failure and unauthorized fund movements.
 
-**For Qubic Ecosystem**:
-- Trust anchor: Secure bridge = network credibility
-- Institutional gateway: Opens doors to TradFi
-- Developer template: Reusable multisig pattern for other dApps
+**Operational Benefits**:
+- Distributed responsibility across multiple owners
+- Transparent approval process
+- Recoverability in case of compromised individual keys
+- Alignment with security best practices for bridge infrastructure
 
-### Target Users
+### Implementation Approach
 
-1. **Institutional Investors** (Primary)
-   - DAOs managing treasuries
-   - Funds bridging >$100k
-   - Exchanges integrating Qubic
-
-2. **High-Net-Worth Individuals**
-   - Users transferring $10k+
-   - Long-term Qubic holders
-
-3. **Development Teams**
-   - Projects needing secure treasury management
-   - Multisig as infrastructure primitive
-
-### Revenue Model (Bridge Operators)
-
-- **Current**: 0.1% bridge fee
-- **Enhanced Value**: Ability to charge premium fees for multisig security
-- **Volume Growth**: 3-5x increase expected from institutional adoption
+This implementation follows the MsVault reference model, adapting its proven multisig architecture to VottunBridge's specific requirements for cross-chain order management.
 
 ---
 
@@ -93,43 +64,40 @@ Implementing multisig positions VottunBridge as:
 ### 4.1 Core Multisig Capabilities
 
 **Multi-Party Approval System**
-- Configurable threshold (e.g., 3-of-5, 2-of-3)
-- Each critical operation requires M of N approvals
+- Configurable threshold (M-of-N signatures required)
+- Each critical operation requires multiple approvals
 - Approval revocation before execution
 
 **Wallet Owner Management**
 - Add/remove authorized signers
 - Dynamic threshold adjustment
-- Owner rotation without service interruption
+- Owner list management
 
 **Order Approval Workflow**
 - Complete Order: Requires multisig approval
-- Refund Order: Requires multisig approval
+- Refund Order: Requires multisig approval  
 - Transfer to Contract: Requires multisig approval
 
 ### 4.2 Transparency & Auditing
 
 **Approval Tracking**
-- Who approved/rejected each operation
-- Timestamp of each action
-- Full audit trail on-chain
+- Record of who approved/rejected each operation
+- Timestamp tracking
+- Audit trail
 
-**Real-Time Monitoring**
-- Current approval status (2/3 approved)
-- Pending operations dashboard
-- Notification system for new approval requests
+**Status Monitoring**
+- Current approval status visibility
+- Pending operations tracking
 
 ### 4.3 Security Features
 
 **Emergency Controls**
-- Pause mechanism (requires multisig)
-- Emergency recovery procedures
-- Time-locks for sensitive changes
+- Emergency pause/unpause procedures
+- Fallback mechanisms
 
-**Gas Optimization**
-- Batch approval processing
-- Efficient storage patterns
-- Minimal overhead vs single-sig
+**Efficiency**
+- Batch approval processing capability
+- Optimized storage patterns
 
 ---
 
@@ -146,7 +114,7 @@ Implementing multisig positions VottunBridge as:
 **EVM Contract (QubicBridge.sol)**
 - Operator multisig system
 - Approval mappings and threshold validation
-- Gas-optimized approval storage
+- Approval storage mechanisms
 - Emergency pause functionality
 
 ### 5.2 Backend Services
@@ -154,22 +122,22 @@ Implementing multisig positions VottunBridge as:
 **Go API Layer**
 - Multisig service orchestration
 - Approval workflow management
-- Real-time status synchronization
-- WebSocket support for live updates
+- Status synchronization
+- API endpoints for approval operations
 
 **API Endpoints**
 - Submit approval/rejection
 - Query approval status
 - Manage wallet owners
-- Historical audit logs
+- Audit log access
 
 ### 5.3 Frontend Interface
 
-**React Admin Dashboard**
-- Pending approvals view
-- One-click approval/rejection
-- Wallet configuration panel
-- Audit trail visualization
+**React Components**
+- State management hooks for multisig operations
+- API integration layer
+- Approval status handling
+- Error handling and retry mechanisms
 
 ---
 
@@ -178,16 +146,12 @@ Implementing multisig positions VottunBridge as:
 ```
 ┌─────────────────────────────────────────────────────┐
 │                 React Frontend                      │
-│  ┌──────────────┐  ┌──────────────┐                │
-│  │ Approval UI  │  │ Wallet Mgmt  │                │
-│  └──────────────┘  └──────────────┘                │
+│            (State Management & UI)                  │
 └───────────────┬─────────────────────────────────────┘
-                │ HTTPS/WSS
+                │ API Calls
 ┌───────────────▼─────────────────────────────────────┐
 │              Go Backend API                         │
-│  ┌──────────────┐  ┌──────────────┐                │
-│  │ Multisig Svc │  │ Order Svc    │                │
-│  └──────────────┘  └──────────────┘                │
+│         (Approval Orchestration)                    │
 └───────┬────────────────────┬────────────────────────┘
         │                    │
 ┌───────▼────────┐   ┌──────▼─────────┐
@@ -195,16 +159,16 @@ Implementing multisig positions VottunBridge as:
 │ (VottunBridge) │   │ (QubicBridge)  │
 │                │   │                │
 │ • Owners[]     │   │ • Operators[]  │
-│ • Threshold    │   │ • Approvals{}  │
-│ • Approvals{}  │   │ • Threshold    │
+│ • Threshold    │   │ • Approvals    │
+│ • Approvals    │   │ • Threshold    │
 └────────────────┘   └────────────────┘
 ```
 
-**Key Design Principles**:
-- **Defense in Depth**: Multisig on both chains
-- **Fail-Safe**: Operations halt if threshold not met
-- **Auditable**: All approvals logged immutably
-- **Upgradeable**: Owner/threshold changes without redeployment
+**Design Principles**:
+- Multisig validation on both chains
+- Operations require threshold approval
+- All approvals logged immutably
+- Owner/threshold management without redeployment
 
 ---
 
@@ -243,24 +207,25 @@ Implementing multisig positions VottunBridge as:
 
 ## 8. Detailed Scope & Milestones (SAFe)
 
+**Note**: These milestones organize the work from the technical breakdown into deployable, demonstrable increments.
+
 ### Milestone 1: Core Multisig Infrastructure (20%)
 **Duration**: Week 1 (development) + Week 2 (QA)
 **Hours**: 68h development
 **Payment**: $4,200 USD (in Qus)
 
-**Deliverables**:
-- ✅ Qubic contract with 2-of-3 multisig for `completeOrder`
-- ✅ Go API endpoints: `submitApproval`, `getApprovalStatus`
-- ✅ Basic React UI showing pending approvals
-- ✅ Deployed to testnet
-- ✅ **Demo**: Execute complete order requiring 2 approvals
+**Scope** (from technical breakdown):
+- Qubic: Multisig wallet structures, order structure modifications, core validation functions (sections 1.1, 1.2, 1.3)
+- Go: DTO structures, basic business logic (sections 2.1, 2.2 partial)
+- React: Initial state management hooks (section 4.1 partial)
+- Deployed to testnet
 
 **QA**: Week 2 (Ecosystem Services validation)
 
 **Success Criteria**:
-- Order #1 completed with 2 approvals in <30 seconds
-- Zero approvals = order not executed
-- All events properly emitted and logged
+- Multisig structure deployed and functional
+- Basic approval validation working
+- API endpoints operational
 
 ---
 
@@ -269,41 +234,39 @@ Implementing multisig positions VottunBridge as:
 **Hours**: 85h development
 **Payment**: $5,250 USD (in Qus)
 
-**Deliverables**:
-- ✅ Multisig for `refundOrder` and `transferToContract`
-- ✅ EVM contract operator multisig system
-- ✅ Approval revocation functionality
-- ✅ Audit trail API endpoints
-- ✅ **Demo**: Complete refund with revoked approval scenario
+**Scope** (from technical breakdown):
+- Qubic: Refactor critical operations (completeOrder, refundOrder, transferToContract) (section 1.4)
+- Go: Refactor endpoints, multisig API endpoints (sections 2.3, 2.4)
+- EVM: Operator multisig system, refactor order operations (sections 3.1, 3.2)
+- Initial unit testing (section 5.1 partial)
 
 **QA**: Week 4 (Ecosystem Services validation)
 
 **Success Criteria**:
-- Refund approved by 2/3, executed successfully
-- Approval revoked before threshold = order stays pending
-- EVM operator approvals synchronized with Qubic
+- All order operations require multisig approval
+- EVM operator multisig functional
+- Cross-chain approval synchronization working
 
 ---
 
-### Milestone 3: Wallet Management + Advanced Features (25%)
+### Milestone 3: Wallet Management + Testing (25%)
 **Duration**: Week 5 (development) + Week 6 (QA)
 **Hours**: 85h development
 **Payment**: $5,250 USD (in Qus)
 
-**Deliverables**:
-- ✅ Add/remove owners with multisig approval
-- ✅ Dynamic threshold adjustment
-- ✅ Emergency pause/unpause mechanism
-- ✅ Batch approval processing
-- ✅ Full admin dashboard UI
-- ✅ **Demo**: Add owner, change threshold 2/3→3/4, execute order
+**Scope** (from technical breakdown):
+- Qubic: Wallet management functions (owner add/remove, threshold changes) (section 1.5)
+- EVM: Multisig management functions (section 3.3)
+- React: Complete state management and API integration (section 4.1 complete)
+- Testing: Unit testing, E2E integration, security testing (sections 5.1, 5.2, 5.3)
 
 **QA**: Week 6 (Ecosystem Services validation)
 
 **Success Criteria**:
-- Add owner requiring existing owner approval
-- Threshold change prevents invalid configurations (e.g., 5/3)
-- Emergency pause halts all operations
+- Owner management operational
+- Threshold adjustment working
+- Emergency procedures functional
+- Comprehensive test coverage
 
 ---
 
@@ -312,21 +275,21 @@ Implementing multisig positions VottunBridge as:
 **Hours**: 102h development + audit coordination
 **Payment**: $6,300 USD (in Qus)
 
-**Deliverables**:
-- ✅ Smart contract security audit (external firm)
-- ✅ Production deployment to mainnet
-- ✅ Migration script for existing orders
-- ✅ Monitoring & alerting setup
-- ✅ Complete documentation
-- ✅ **Demo**: Live mainnet transaction with multisig
+**Scope** (from technical breakdown):
+- Testing: UAT and scenario-based testing (section 5.4)
+- Documentation: Technical documentation, architecture docs, API docs (section 6.1)
+- Deployment: Migration scripts, deployment, validation, go-live support (sections 6.3, 6.4)
+- External smart contract security audit
+- Production deployment to mainnet
+- Monitoring and alerting setup
 
 **QA**: Weeks 9-10 (Final validation + audit review)
 
 **Success Criteria**:
 - Zero critical vulnerabilities in audit
-- 99.9% uptime first week mainnet
+- Production deployment successful
 - All existing bridge functionality preserved
-- <5% gas cost increase vs single-sig
+- Complete documentation delivered
 
 ---
 
@@ -398,33 +361,31 @@ Implementing multisig positions VottunBridge as:
 
 ### Core Team (4 Members)
 
-**Smart Contract Developer (Qubic Specialist)**
-- Role: Qubic contract multisig implementation (64h from original breakdown)
-- Experience: 3+ years Qubic development
-- Allocation: 50% (20h/week) across M1-M3, 25% in M4
+**Smart Contract Developer (Qubic)**
+- Role: Qubic contract multisig implementation (64h from technical breakdown)
+- Allocation: 50% across M1-M3, 25% in M4
 
-**Smart Contract Developer (Solidity Specialist)**
-- Role: EVM contract multisig implementation (40h from original breakdown)
-- Experience: 5+ years Solidity, security focus
-- Allocation: 50% (20h/week) across M1-M3, 25% in M4
+**Smart Contract Developer (Solidity)**
+- Role: EVM contract multisig implementation (40h from technical breakdown)
+- Allocation: 50% across M1-M3, 25% in M4
 
 **Backend Developer (Go)**
-- Role: API services, approval orchestration (44h from original breakdown)
-- Allocation: 75% (30h/week) across M1-M3, 50% in M4
+- Role: API services, approval orchestration (44h from technical breakdown)
+- Allocation: 75% across M1-M3, 50% in M4
 - **Provided by Vottun** (cost already deducted)
 
 **Frontend Developer (React)**
-- Role: Admin dashboard, approval UI (15h from original breakdown)
-- Allocation: 50% (20h/week) in M2-M3, 25% in M4
+- Role: State management, API integration (15h from technical breakdown)
+- Allocation: 50% in M2-M3, 25% in M4
 - **Provided by Vottun** (cost already deducted)
 
 **Security Auditor (External)**
 - Role: Smart contract audit (M4)
-- Firm: TBD (CertiK/OpenZeppelin equivalent)
+- Firm: TBD
 - Allocation: Weeks 9-10 only
 
 **Team Capacity**: ~90 hours/week parallel development
-**Total Effort**: 340 hours (235h base + 105h buffer included)
+**Total Effort**: 340 hours (235h base + 105h buffer from technical breakdown)
 
 ---
 
@@ -451,43 +412,46 @@ Legend: █ = Active work | QA = Ecosystem Services review
 
 ## 13. Risk Mitigation
 
-| Risk | Impact | Mitigation |
-|------|--------|------------|
-| Audit finds critical issues | High | Budget includes rework time |
-| Owner key loss | Medium | Recovery procedures in M3 |
-| Gas costs too high (EVM) | Medium | Optimization in M2, benchmarking |
-| QA delays | Low | Built-in 1-week buffer per milestone |
+| Risk | Mitigation |
+|------|------------|
+| Smart contract vulnerabilities | External security audit included in M4 |
+| Integration issues | Incremental testing throughout milestones |
+| Timeline delays | QA buffer included in each milestone |
 
 ---
 
 ## 14. Success Metrics
 
 **Security**:
-- Zero critical audit findings
-- 100% multisig enforcement on critical ops
+- Zero critical vulnerabilities in external audit
+- Multisig enforcement on all critical operations
 
-**Performance**:
-- <10 second approval submission
-- <5% gas cost increase
-- 99.9% uptime
+**Functionality**:
+- All order operations (complete, refund, transfer) require configured threshold
+- Owner management operational
+- Emergency procedures functional
 
-**Adoption**:
-- 80% of orders use multisig within 3 months
-- 5+ institutional users onboarded
-- Zero security incidents
+**Deliverables**:
+- All milestones pass QA validation
+- Production deployment successful
+- Complete technical documentation
 
 ---
 
 ## 15. Conclusion
 
-This proposal delivers **institutional-grade security** to VottunBridge through a battle-tested multisig architecture. By following SAFe principles, each milestone provides demonstrable user value while maintaining production readiness.
+This proposal implements multisig security for VottunBridge, replacing the current single-administrator architecture with a distributed approval system based on the proven MsVault reference implementation.
 
-The $21,000 investment positions Qubic as a **leader in bridge security**, unlocking institutional adoption and setting a security standard for the ecosystem.
+The project delivers:
+- Enhanced security through multi-signature requirements
+- Transparent approval workflows
+- Complete audit trail
+- Production-ready deployment with external security audit
 
-We look forward to building the most secure cross-chain bridge in the Qubic ecosystem.
+Total investment: $21,000 USD over 10 weeks, delivered in 4 SAFe-compliant milestones.
 
 ---
 
 **Contact**: [Your Name/Email]
 **Proposal Date**: January 2025
-**Word Count**: ~2,400 words
+**Word Count**: ~2,100 words
