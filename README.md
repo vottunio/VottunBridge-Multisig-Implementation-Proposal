@@ -1,177 +1,500 @@
 # VottunBridge Multisig Implementation
+## Qubic Grants & Incubation Proposal
 
-## Current Situation Analysis
+---
 
-### Current VottunBridge:
-- Single admin system (`id admin`) at line 249
-- Manager list (`Array<id, 16> managers`) at line 251
-- Simple validations with `isAdmin()` and `isManager()`
-- Critical operations like `completeOrder`, `refundOrder` require only 1 manager
+## 1. Executive Summary
 
-### MsVault as reference:
-- Complete multisig system with `owners`, `numberOfOwners`, `requiredApprovals`
-- Approval validation in `releaseTo` (lines 688-706 MsVault.h)
-- Voting system for fund releases
+This proposal outlines the implementation of a comprehensive multisig (multi-signature) security layer for VottunBridge, the critical infrastructure connecting Qubic network with EVM-compatible blockchains. The project will replace the current single-administrator architecture with a decentralized governance model requiring multiple approvals for critical operations, significantly enhancing security and trustworthiness of cross-chain asset transfers.
 
-## Detailed Task Breakdown
+**Total Investment**: $21,000 USD (paid in Qus)
+**Duration**: 10 weeks (4 milestones)
+**Team Size**: 4 specialized developers
 
-### 1. Qubic Contract (VottunBridge.h) - 64 hours
+---
 
-**1.1 Design and implement multisig wallet structures (8h)**
+## 2. Business Need
 
-**1.2 Modify existing order structures for approval tracking (8h)**
-- Extend BridgeOrder with approval tracking fields
-- Update all related input/output structures
-- Ensure proper initialization and cleanup
+### Current Problem
 
-**1.3 Implement core multisig validation functions (16h)**
-- Owner verification and validation logic
-- Approval counting and threshold checking
-- Security validations and edge case handling
+VottunBridge currently operates with a **single point of failure**:
+- One admin account controls all critical operations
+- Single manager approval can execute fund transfers
+- No audit trail for decision-making
+- High risk of compromised keys leading to total fund loss
+- Lacks institutional-grade security standards required for DeFi
 
-**1.4 Refactor critical operations for multisig workflow (16h)**
-- Complete redesign of completeOrder for multiple approvals
-- Modify refundOrder with approval requirements
-- Update transferToContract with multisig validation
-- Add approval submission and revocation logic
+### Market Context
 
-**1.5 Add comprehensive wallet management functions (16h)**
-- Owner addition and removal with proper validations
-- Threshold management with safety checks
-- Emergency procedures and fallback mechanisms
-- Event logging and audit trail implementation
+Cross-chain bridges are the **#1 attack vector** in blockchain:
+- $2.5B+ stolen from bridges in 2022-2023
+- 90% of attacks exploited centralized control mechanisms
+- Institutional investors **require multisig** as minimum security standard
+- Regulatory frameworks (MiCA, etc.) increasingly mandate distributed control
 
-### 2. Go Backend - 44 hours
+### Business Impact
 
-**2.1 Design and implement comprehensive DTO structures (8h)**
-- Create detailed multisig wallet DTOs with validation
-- Update all existing order DTOs for approval tracking
-- Design approval history and audit trail structures
-- Implement proper JSON marshaling and validation
+Without multisig, VottunBridge faces:
+- ❌ Limited institutional adoption
+- ❌ Higher insurance costs
+- ❌ Regulatory compliance risks
+- ❌ Reduced user confidence
+- ❌ Competitive disadvantage vs. secure bridges (LayerZero, Wormhole)
 
-**2.2 Develop robust multisig business logic (12h)**
-- Complete multisig service layer with state management
-- Approval workflow orchestration and validation
-- Integration with existing Qubic contract interactions
-- Error handling and retry mechanisms for multisig operations
+### Opportunity
 
-**2.3 Refactor existing endpoints for multisig compatibility (8h)**
-- Redesign complete-order endpoint with approval workflows
-- Update refund-order with multisig voting requirements
-- Modify all order status endpoints for approval visibility
-- Ensure backward compatibility with existing clients
+Implementing multisig positions VottunBridge as:
+- ✅ Enterprise-grade secure infrastructure
+- ✅ Compliant with institutional standards
+- ✅ Attractive for high-value transfers ($1M+)
+- ✅ Reference implementation for Qubic ecosystem
 
-**2.4 Implement comprehensive multisig API endpoints (16h)**
-- Approval submission and tracking endpoints
-- Wallet owner management with proper authorization
-- Approval history and audit trail endpoints
-- Real-time approval status and notification systems
-- Batch approval operations for efficiency
+---
 
-### 3. EVM Contract (QubicBridge.sol) - 40 hours
+## 3. Business Model
 
-**3.1 Design and implement comprehensive operator multisig system (12h)**
-- Create sophisticated approval tracking mappings and structures
-- Implement operator role management with proper access controls
-- Design gas-efficient approval storage and retrieval mechanisms
-- Add comprehensive event emission for approval tracking
+### Value Proposition
 
-**3.2 Refactor critical order operations for multisig requirements (16h)**
-- Complete redesign of confirmOrder with approval threshold validation
-- Modify executeOrder to require multiple operator signatures
-- Update revertOrder with multisig approval requirements
-- Implement approval expiration and cleanup mechanisms
+**For Users**:
+- Sleep soundly: No single person can steal funds
+- Transparency: All approvals visible on-chain
+- Recoverability: Lost key ≠ lost funds
 
-**3.3 Add comprehensive multisig management functions (12h)**
-- Approval submission with proper validation and security checks
-- Threshold management with administrative controls
-- Operator addition and removal with multisig requirements
-- Emergency procedures and pause functionality
-- Batch approval processing for operational efficiency
+**For Qubic Ecosystem**:
+- Trust anchor: Secure bridge = network credibility
+- Institutional gateway: Opens doors to TradFi
+- Developer template: Reusable multisig pattern for other dApps
 
-### 4. React Frontend - 15 hours
+### Target Users
 
-**4.1 Develop robust state management and API integration (15h)**
-- Comprehensive multisig wallet hooks with caching
-- Real-time approval status hooks with WebSocket integration
-- Error handling and retry mechanisms for multisig operations
-- Optimistic UI updates for better user experience
-- Integration with existing authentication and authorization systems
+1. **Institutional Investors** (Primary)
+   - DAOs managing treasuries
+   - Funds bridging >$100k
+   - Exchanges integrating Qubic
 
-### 5. Testing & Integration - 44 hours
+2. **High-Net-Worth Individuals**
+   - Users transferring $10k+
+   - Long-term Qubic holders
 
-**5.1 Comprehensive unit testing across all components (16h)**
-- Qubic contract multisig function testing with edge cases
-- Go backend service layer testing with mock scenarios
-- EVM contract testing with complex approval workflows
-- React component testing with various approval states
+3. **Development Teams**
+   - Projects needing secure treasury management
+   - Multisig as infrastructure primitive
 
-**5.2 Extensive end-to-end integration testing (12h)**
-- Cross-platform multisig workflow testing
-- Real-world scenario simulation with multiple participants
-- Performance testing under high approval load
-- Error recovery and resilience testing
+### Revenue Model (Bridge Operators)
 
-**5.3 Specialized multisig security and edge case testing (8h)**
-- Concurrent approval submission testing
-- Threshold manipulation and security breach scenarios
-- Owner management edge cases and attack vectors
-- Gas optimization and cost analysis for EVM operations
+- **Current**: 0.1% bridge fee
+- **Enhanced Value**: Ability to charge premium fees for multisig security
+- **Volume Growth**: 3-5x increase expected from institutional adoption
 
-**5.4 User acceptance and scenario-based testing (8h)**
-- Complete approval workflow simulation with real users
-- Mobile and desktop interface testing across browsers
-- Accessibility testing for multisig interfaces
-- Performance benchmarking and optimization
-- Load testing with multiple simultaneous approvals
+---
 
-### 6. Documentation & Deployment - 28 hours
+## 4. Functional Features
 
-**6.1 Comprehensive technical documentation (8h)**
-- Detailed multisig architecture documentation
-- API documentation with approval workflow examples
-- Smart contract documentation with security considerations
+### 4.1 Core Multisig Capabilities
 
-**6.3 Migration and deployment preparation (4h)**
-- Production-ready migration scripts with rollback procedures
-- Environment configuration and security hardening guides
-- Monitoring and alerting setup for multisig operations
+**Multi-Party Approval System**
+- Configurable threshold (e.g., 3-of-5, 2-of-3)
+- Each critical operation requires M of N approvals
+- Approval revocation before execution
 
-**6.4 Deployment, validation, and go-live support (16h)**
-- Staged deployment across test and production environments
-- Comprehensive validation testing in production-like environment
-- Go-live support and monitoring during initial deployment
-- Post-deployment optimization and performance tuning
-- Emergency response procedures and rollback planning
+**Wallet Owner Management**
+- Add/remove authorized signers
+- Dynamic threshold adjustment
+- Owner rotation without service interruption
 
-## Total Time Estimation
+**Order Approval Workflow**
+- Complete Order: Requires multisig approval
+- Refund Order: Requires multisig approval
+- Transfer to Contract: Requires multisig approval
 
-| Component | Estimated Hours | Complexity |
-|-----------|-----------------|------------|
-| Qubic Contract | 64h | High |
-| Go Backend | 44h | Medium-High |
-| EVM Contract | 40h | Medium-High |
-| React Frontend | 15h | High |
-| Testing/Integration | 44h | High |
-| Documentation/Deployment | 28h | Medium |
-| **Total** | **235 hours** | |
+### 4.2 Transparency & Auditing
 
-## Buffer and Risk Contingency
+**Approval Tracking**
+- Who approved/rejected each operation
+- Timestamp of each action
+- Full audit trail on-chain
 
-- Risk Buffer: +20%: 47h
-- Integration Complexity: +10%: 23h 
-- Unforeseen Issues: +15%: 35h
+**Real-Time Monitoring**
+- Current approval status (2/3 approved)
+- Pending operations dashboard
+- Notification system for new approval requests
 
-**Total Buffer: 105 hours**
+### 4.3 Security Features
 
-**Total with Contingency: 340 hours**
+**Emergency Controls**
+- Pause mechanism (requires multisig)
+- Emergency recovery procedures
+- Time-locks for sensitive changes
 
-## Pricing
+**Gas Optimization**
+- Batch approval processing
+- Efficient storage patterns
+- Minimal overhead vs single-sig
 
-**COMPLETE PRICE: 340 hours × 85€/h = 28,900€**
+---
 
-### Adjustments:
-- We pay for Go Backend (44h) and React Frontend (15h): **-5,015€**
-- Goodwill - reduction in buffer (-50%): **-4,462€**
+## 5. Components to be Developed
 
-**FINAL PRICE: 19,423€**
+### 5.1 Smart Contract Layer
+
+**Qubic Contract (VottunBridge.h)**
+- Multisig wallet structure with owner management
+- Approval validation logic for orders
+- Event emission for approval tracking
+- Integration with existing bridge logic
+
+**EVM Contract (QubicBridge.sol)**
+- Operator multisig system
+- Approval mappings and threshold validation
+- Gas-optimized approval storage
+- Emergency pause functionality
+
+### 5.2 Backend Services
+
+**Go API Layer**
+- Multisig service orchestration
+- Approval workflow management
+- Real-time status synchronization
+- WebSocket support for live updates
+
+**API Endpoints**
+- Submit approval/rejection
+- Query approval status
+- Manage wallet owners
+- Historical audit logs
+
+### 5.3 Frontend Interface
+
+**React Admin Dashboard**
+- Pending approvals view
+- One-click approval/rejection
+- Wallet configuration panel
+- Audit trail visualization
+
+---
+
+## 6. Technical Architecture (High-Level)
+
+```
+┌─────────────────────────────────────────────────────┐
+│                 React Frontend                      │
+│  ┌──────────────┐  ┌──────────────┐                │
+│  │ Approval UI  │  │ Wallet Mgmt  │                │
+│  └──────────────┘  └──────────────┘                │
+└───────────────┬─────────────────────────────────────┘
+                │ HTTPS/WSS
+┌───────────────▼─────────────────────────────────────┐
+│              Go Backend API                         │
+│  ┌──────────────┐  ┌──────────────┐                │
+│  │ Multisig Svc │  │ Order Svc    │                │
+│  └──────────────┘  └──────────────┘                │
+└───────┬────────────────────┬────────────────────────┘
+        │                    │
+┌───────▼────────┐   ┌──────▼─────────┐
+│ Qubic Contract │   │  EVM Contract  │
+│ (VottunBridge) │   │ (QubicBridge)  │
+│                │   │                │
+│ • Owners[]     │   │ • Operators[]  │
+│ • Threshold    │   │ • Approvals{}  │
+│ • Approvals{}  │   │ • Threshold    │
+└────────────────┘   └────────────────┘
+```
+
+**Key Design Principles**:
+- **Defense in Depth**: Multisig on both chains
+- **Fail-Safe**: Operations halt if threshold not met
+- **Auditable**: All approvals logged immutably
+- **Upgradeable**: Owner/threshold changes without redeployment
+
+---
+
+## 7. User Journey Examples
+
+### Journey 1: Complete a Bridge Order (Happy Path)
+
+**Actors**: Alice (User), Bob, Carol, Dave (3 of 4 multisig owners)
+
+1. **Alice initiates**: Bridges 10,000 USDT from Ethereum to Qubic
+2. **Order created**: Backend detects pending order #12345
+3. **Bob approves**: Receives notification, clicks "Approve" in dashboard
+4. **Carol approves**: Reviews details, approves (2/3 threshold met)
+5. **Order executes**: Backend automatically completes order
+6. **Alice receives**: 10,000 USDT arrives in Qubic wallet
+
+**Time**: ~5 minutes (depends on approver availability)
+
+---
+
+### Journey 2: Refund a Failed Order
+
+**Actors**: Alice (User), Bob, Carol, Dave (multisig owners)
+
+1. **Alice's order fails**: Network issue prevents completion
+2. **Alice requests refund**: Submits refund request for order #12346
+3. **Bob investigates**: Reviews blockchain logs, confirms failure
+4. **Bob approves refund**: Submits approval
+5. **Carol verifies**: Double-checks, approves (2/3 met)
+6. **Refund executes**: Alice receives funds back on Ethereum
+
+---
+
+### Journey 3: Add New Multisig Owner
+
+**Actors**: Bob, Carol, Dave, Emma (new owner candidate)
+
+1. **Proposal**: Bob proposes adding Emma (DevOps lead)
+2. **Discussion**: Off-chain communication among owners
+3. **Carol approves**: Votes yes on-chain
+4. **Dave approves**: 2/3 threshold met
+5. **Emma added**: Now can approve future operations
+6. **Threshold updated**: Optionally change from 2/3 to 3/4
+
+---
+
+### Journey 4: Emergency Pause (Security Incident)
+
+**Actors**: Bob (detects anomaly), Carol, Dave
+
+1. **Bob detects**: Unusual transaction pattern
+2. **Bob initiates pause**: Submits emergency pause request
+3. **Carol confirms**: Reviews logs, approves immediately
+4. **Bridge paused**: All operations halted (2/3 met)
+5. **Investigation**: Team analyzes security logs
+6. **Resolution**: After fix, multisig approves unpause
+
+---
+
+## 8. Detailed Scope & Milestones (SAFe)
+
+### Milestone 1: Core Multisig Infrastructure (20%)
+**Duration**: Week 1 (development) + Week 2 (QA)
+**Hours**: 68h development
+**Payment**: $4,200 USD (in Qus)
+
+**Deliverables**:
+- ✅ Qubic contract with 2-of-3 multisig for `completeOrder`
+- ✅ Go API endpoints: `submitApproval`, `getApprovalStatus`
+- ✅ Basic React UI showing pending approvals
+- ✅ Deployed to testnet
+- ✅ **Demo**: Execute complete order requiring 2 approvals
+
+**QA**: Week 2 (Ecosystem Services validation)
+
+**Success Criteria**:
+- Order #1 completed with 2 approvals in <30 seconds
+- Zero approvals = order not executed
+- All events properly emitted and logged
+
+---
+
+### Milestone 2: Full Order Lifecycle + EVM Integration (25%)
+**Duration**: Week 3 (development) + Week 4 (QA)
+**Hours**: 85h development
+**Payment**: $5,250 USD (in Qus)
+
+**Deliverables**:
+- ✅ Multisig for `refundOrder` and `transferToContract`
+- ✅ EVM contract operator multisig system
+- ✅ Approval revocation functionality
+- ✅ Audit trail API endpoints
+- ✅ **Demo**: Complete refund with revoked approval scenario
+
+**QA**: Week 4 (Ecosystem Services validation)
+
+**Success Criteria**:
+- Refund approved by 2/3, executed successfully
+- Approval revoked before threshold = order stays pending
+- EVM operator approvals synchronized with Qubic
+
+---
+
+### Milestone 3: Wallet Management + Advanced Features (25%)
+**Duration**: Week 5 (development) + Week 6 (QA)
+**Hours**: 85h development
+**Payment**: $5,250 USD (in Qus)
+
+**Deliverables**:
+- ✅ Add/remove owners with multisig approval
+- ✅ Dynamic threshold adjustment
+- ✅ Emergency pause/unpause mechanism
+- ✅ Batch approval processing
+- ✅ Full admin dashboard UI
+- ✅ **Demo**: Add owner, change threshold 2/3→3/4, execute order
+
+**QA**: Week 6 (Ecosystem Services validation)
+
+**Success Criteria**:
+- Add owner requiring existing owner approval
+- Threshold change prevents invalid configurations (e.g., 5/3)
+- Emergency pause halts all operations
+
+---
+
+### Milestone 4: Production Deployment + Audit (30%)
+**Duration**: Weeks 7-8 (development + audit preparation) + Weeks 9-10 (external audit)
+**Hours**: 102h development + audit coordination
+**Payment**: $6,300 USD (in Qus)
+
+**Deliverables**:
+- ✅ Smart contract security audit (external firm)
+- ✅ Production deployment to mainnet
+- ✅ Migration script for existing orders
+- ✅ Monitoring & alerting setup
+- ✅ Complete documentation
+- ✅ **Demo**: Live mainnet transaction with multisig
+
+**QA**: Weeks 9-10 (Final validation + audit review)
+
+**Success Criteria**:
+- Zero critical vulnerabilities in audit
+- 99.9% uptime first week mainnet
+- All existing bridge functionality preserved
+- <5% gas cost increase vs single-sig
+
+---
+
+## 9. Testing & Quality Assurance
+
+### Unit Testing (Each Milestone)
+- Smart contract function coverage >90%
+- Backend service mocking
+- React component testing
+
+### Integration Testing
+- End-to-end approval workflows
+- Cross-chain synchronization
+- Concurrent approval scenarios
+
+### Security Testing (Milestone 4)
+- External smart contract audit
+- Penetration testing
+- Gas optimization analysis
+
+### QA Process
+- 1 week Ecosystem Services review per milestone
+- Regression testing against existing features
+- Performance benchmarking
+
+---
+
+## 10. Payment Terms
+
+| Milestone | Deliverable | Amount USD | % | Hours | QA Week | Payment Week |
+|-----------|-------------|------------|---|-------|---------|--------------|
+| M1 | Core Multisig | $4,200 | 20% | 68h | Week 2 | Week 2 |
+| M2 | Full Lifecycle | $5,250 | 25% | 85h | Week 4 | Week 4 |
+| M3 | Wallet Mgmt | $5,250 | 25% | 85h | Week 6 | Week 6 |
+| M4 | Production | $6,300 | 30% | 102h | Weeks 9-10 | Week 10 |
+| **Total** | | **$21,000** | **100%** | **340h** | | |
+
+**Terms**:
+- Payments denominated in **USD**
+- Paid in **Qus** at conversion rate at time of payment
+- No upfront payment
+- Payment upon milestone delivery + QA approval
+- First payment: 20% (compliant with max 20% requirement)
+- Last payment: 30% (compliant with min 30% requirement)
+
+---
+
+## 11. Team Composition
+
+### Core Team (4 Members)
+
+**Smart Contract Developer (Qubic Specialist)**
+- Role: Qubic contract multisig implementation (64h from original breakdown)
+- Experience: 3+ years Qubic development
+- Allocation: 50% (20h/week) across M1-M3, 25% in M4
+
+**Smart Contract Developer (Solidity Specialist)**
+- Role: EVM contract multisig implementation (40h from original breakdown)
+- Experience: 5+ years Solidity, security focus
+- Allocation: 50% (20h/week) across M1-M3, 25% in M4
+
+**Backend Developer (Go)**
+- Role: API services, approval orchestration (44h from original breakdown)
+- Allocation: 75% (30h/week) across M1-M3, 50% in M4
+- **Provided by Vottun** (cost already deducted)
+
+**Frontend Developer (React)**
+- Role: Admin dashboard, approval UI (15h from original breakdown)
+- Allocation: 50% (20h/week) in M2-M3, 25% in M4
+- **Provided by Vottun** (cost already deducted)
+
+**Security Auditor (External)**
+- Role: Smart contract audit (M4)
+- Firm: TBD (CertiK/OpenZeppelin equivalent)
+- Allocation: Weeks 9-10 only
+
+**Team Capacity**: ~90 hours/week parallel development
+**Total Effort**: 340 hours (235h base + 105h buffer included)
+
+---
+
+## 12. Timeline Overview
+
+```
+Week 1-2:  ████ M1 Dev | █ QA
+Week 3-4:  ████ M2 Dev | █ QA  
+Week 5-6:  ████ M3 Dev | █ QA
+Week 7-10: ████ M4 Dev | ████████ Audit
+
+Legend: █ = Active work | QA = Ecosystem Services review
+```
+
+**Total Duration**: 10 weeks (~2.5 months)
+
+**Key Dates** (assuming start January 6, 2025):
+- **Jan 20**: M1 delivered + QA complete
+- **Feb 3**: M2 delivered + QA complete
+- **Feb 17**: M3 delivered + QA complete
+- **Mar 17**: M4 delivered + audit complete
+
+---
+
+## 13. Risk Mitigation
+
+| Risk | Impact | Mitigation |
+|------|--------|------------|
+| Audit finds critical issues | High | Budget includes rework time |
+| Owner key loss | Medium | Recovery procedures in M3 |
+| Gas costs too high (EVM) | Medium | Optimization in M2, benchmarking |
+| QA delays | Low | Built-in 1-week buffer per milestone |
+
+---
+
+## 14. Success Metrics
+
+**Security**:
+- Zero critical audit findings
+- 100% multisig enforcement on critical ops
+
+**Performance**:
+- <10 second approval submission
+- <5% gas cost increase
+- 99.9% uptime
+
+**Adoption**:
+- 80% of orders use multisig within 3 months
+- 5+ institutional users onboarded
+- Zero security incidents
+
+---
+
+## 15. Conclusion
+
+This proposal delivers **institutional-grade security** to VottunBridge through a battle-tested multisig architecture. By following SAFe principles, each milestone provides demonstrable user value while maintaining production readiness.
+
+The $21,000 investment positions Qubic as a **leader in bridge security**, unlocking institutional adoption and setting a security standard for the ecosystem.
+
+We look forward to building the most secure cross-chain bridge in the Qubic ecosystem.
+
+## 16. Technical Appendix
+
+For detailed technical implementation specifications, including:
+- Hour-by-hour breakdown by component
+- Detailed code structure analysis
+- MsVault reference implementation comparison
+- Buffer and risk contingency calculations
+
+**See**: [Technical_Breakdown.md](Technical_Breakdown.md)
