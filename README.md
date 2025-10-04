@@ -210,57 +210,34 @@ Implementing multisig positions VottunBridge as:
 
 ## 7. User Journey Examples
 
-### Journey 1: Complete a Bridge Order (Happy Path)
+### Journey 1: Bridge Order Completion (Happy Path)
 
-**Actors**: Alice (User), Bob, Carol, Dave (3 of 4 multisig owners)
-
-1. **Alice initiates**: Bridges 10,000 USDT from Ethereum to Qubic
-2. **Order created**: Backend detects pending order #12345
-3. **Bob approves**: Receives notification, clicks "Approve" in dashboard
-4. **Carol approves**: Reviews details, approves (2/3 threshold met)
-5. **Order executes**: Backend automatically completes order
-6. **Alice receives**: 10,000 USDT arrives in Qubic wallet
-
-**Time**: ~5 minutes (depends on approver availability)
+1. User initiates bridge transfer from EVM to Qubic
+2. Order is created in the system
+3. Manager 1 reviews and approves
+4. Manager 2 approves (threshold met)
+5. Order executes automatically
+6. User receives tokens on destination chain
 
 ---
 
-### Journey 2: Refund a Failed Order
+### Journey 2: Refund Order
 
-**Actors**: Alice (User), Bob, Carol, Dave (multisig owners)
-
-1. **Alice's order fails**: Network issue prevents completion
-2. **Alice requests refund**: Submits refund request for order #12346
-3. **Bob investigates**: Reviews blockchain logs, confirms failure
-4. **Bob approves refund**: Submits approval
-5. **Carol verifies**: Double-checks, approves (2/3 met)
-6. **Refund executes**: Alice receives funds back on Ethereum
+1. User's bridge order fails (network issue, insufficient liquidity, etc.)
+2. User requests refund
+3. Manager 1 verifies failure and approves refund
+4. Manager 2 approves (threshold met)
+5. Refund executes, user receives original tokens back
 
 ---
 
-### Journey 3: Add New Multisig Owner
+### Journey 3: Modify Multisig Configuration
 
-**Actors**: Bob, Carol, Dave, Emma (new owner candidate)
-
-1. **Proposal**: Bob proposes adding Emma (DevOps lead)
-2. **Discussion**: Off-chain communication among owners
-3. **Carol approves**: Votes yes on-chain
-4. **Dave approves**: 2/3 threshold met
-5. **Emma added**: Now can approve future operations
-6. **Threshold updated**: Optionally change from 2/3 to 3/4
-
----
-
-### Journey 4: Emergency Pause (Security Incident)
-
-**Actors**: Bob (detects anomaly), Carol, Dave
-
-1. **Bob detects**: Unusual transaction pattern
-2. **Bob initiates pause**: Submits emergency pause request
-3. **Carol confirms**: Reviews logs, approves immediately
-4. **Bridge paused**: All operations halted (2/3 met)
-5. **Investigation**: Team analyzes security logs
-6. **Resolution**: After fix, multisig approves unpause
+1. Current owners decide to add a new owner
+2. Owner 1 proposes the change
+3. Owner 2 approves (threshold met)
+4. New owner is added to the multisig wallet
+5. Future operations now require approval from the expanded owner set
 
 ---
 
@@ -379,32 +356,41 @@ Implementing multisig positions VottunBridge as:
 
 ## 10. Payment Terms
 
-[TABLA DE MILESTONES] ← Aquí está
 | Milestone | Deliverable | Amount USD | % | Hours | QA Week | Payment Week |
 |-----------|-------------|------------|---|-------|---------|--------------|
 | M1 | Core Multisig | $4,200 | 20% | 68h | Week 2 | Week 2 |
 | M2 | Full Lifecycle | $5,250 | 25% | 85h | Week 4 | Week 4 |
 | M3 | Wallet Mgmt | $5,250 | 25% | 85h | Week 6 | Week 6 |
 | M4 | Production | $6,300 | 30% | 102h | Weeks 9-10 | Week 10 |
-| Total | | $21,000 | 100% | 340h | | |
+| **Total** | | **$21,000** | **100%** | **340h** | | |
 
-Price Calculation Breakdown
-Base Calculation:
+**Terms**:
+- Payments denominated in **USD**
+- Paid in **Qus** at conversion rate at time of payment
+- No upfront payment
+- Payment upon milestone delivery + QA approval
+- First payment: 20% (compliant with max 20% requirement)
+- Last payment: 30% (compliant with min 30% requirement)
 
-Total effort: 340 hours (235h base + 105h contingency buffer)
-Standard development rate: €85/hour
-Gross total: €28,900
+### Price Calculation Breakdown
 
-Cost Adjustments:
+**Base Calculation**:
+- Total effort: 340 hours (235h base + 105h contingency buffer)
+- Standard development rate: €85/hour
+- Gross total: **€28,900**
 
-Go Backend development (44h): Provided by Vottun internal team → -€5,015
-React Frontend development (15h): Provided by Vottun internal team → -€0 (already included in backend discount)
-Goodwill discount (50% reduction on contingency buffer): → -€4,462
+**Cost Adjustments**:
+- Go Backend development (44h): Provided by Vottun internal team → **-€5,015**
+- React Frontend development (15h): Provided by Vottun internal team → **-€0** (already included in backend discount)
+- Goodwill discount (50% reduction on contingency buffer): → **-€4,462**
 
-Subtotal: €19,423
-USD Conversion (at 1.08 EUR/USD exchange rate): $20,977
-Final Price: $21,000 USD (rounded, paid in Qus at time of payment)
-Note: Vottun is absorbing 59 hours of internal development effort (Go Backend + React Frontend) as part of their strategic investment in strengthening the Qubic ecosystem's security infrastructure. The technical breakdown and detailed hour allocation is available in the Technical Implementation Document.
+**Subtotal**: €19,423
+
+**USD Conversion** (at 1.08 EUR/USD exchange rate): **$20,977**
+
+**Final Price**: **$21,000 USD** (rounded, paid in Qus at time of payment)
+
+**Note**: Vottun is absorbing 59 hours of internal development effort (Go Backend + React Frontend) as part of their strategic investment in strengthening the Qubic ecosystem's security infrastructure. The technical breakdown and detailed hour allocation is available in the [Technical Implementation Document](Technical_Breakdown.md).
 
 ---
 
@@ -500,12 +486,8 @@ The $21,000 investment positions Qubic as a **leader in bridge security**, unloc
 
 We look forward to building the most secure cross-chain bridge in the Qubic ecosystem.
 
-## 16. Technical Appendix
+---
 
-For detailed technical implementation specifications, including:
-- Hour-by-hour breakdown by component
-- Detailed code structure analysis
-- MsVault reference implementation comparison
-- Buffer and risk contingency calculations
-
-**See**: [Technical_Breakdown.md](Technical_Breakdown.md)
+**Contact**: [Your Name/Email]
+**Proposal Date**: January 2025
+**Word Count**: ~2,400 words
