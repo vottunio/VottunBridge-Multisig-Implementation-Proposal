@@ -3,6 +3,10 @@
 **Timeline:** Week 1-2
 **Payment:** $4,200 USD (20%)
 
+**Smart Contract:** [VottunBridge.h](https://github.com/sergimima/core-1/blob/feature/2025-08-01-VottunBridge/src/contracts/VottunBridge.h)
+- Branch: `feature/2025-08-01-VottunBridge`
+- Commit: `445c237`
+
 ## Deliverables
 - Multisig wallet structures deployed on testnet
 - Basic approval validation working
