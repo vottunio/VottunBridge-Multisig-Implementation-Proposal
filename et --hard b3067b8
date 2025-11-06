@@ -1,0 +1,16 @@
+[33ma3267ca[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m)[m HEAD@{0}: reset: moving to origin/main
+[33mb665834[m HEAD@{1}: commit: update
+[33m477b5b8[m HEAD@{2}: rebase (finish): returning to refs/heads/main
+[33m477b5b8[m HEAD@{3}: rebase (pick): tu mensaje original
+[33m04950e8[m HEAD@{4}: rebase (pick): update
+[33m467759c[m HEAD@{5}: rebase (pick): M2 deliverable
+[33md64a38f[m HEAD@{6}: rebase (pick): resume
+[33ma3267ca[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m)[m HEAD@{7}: rebase (start): checkout a3267ca
+[33mb3067b8[m HEAD@{8}: commit: tu mensaje original
+[33mf1f0b03[m HEAD@{9}: reset: moving to HEAD~1
+[33m632280e[m HEAD@{10}: commit: update on git ignore
+[33mf1f0b03[m HEAD@{11}: commit: update
+[33m4bbb463[m HEAD@{12}: pull --tags origin main: Merge made by the 'ort' strategy.
+[33m51156b5[m HEAD@{13}: commit: M2 deliverable
+[33ma9d89ac[m HEAD@{14}: commit: resume
+[33m9b01aa1[m HEAD@{15}: clone: from https://github.com/vottunio/VottunBridge-Multisig-Implementation-Proposal.git
