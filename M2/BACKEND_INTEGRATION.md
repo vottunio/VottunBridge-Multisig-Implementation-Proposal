@@ -620,7 +620,7 @@ OPERATOR_ROLE      = keccak256("OPERATOR_ROLE")
 - **Multisig Usage Guide:** `MULTISIG_USAGE.md`
 - **Project Overview:** `CLAUDE.md`
 - **Deployed Contract (Base Sepolia):** `0x50B0A6391BB06cc0C7a228D41352EE91d496aE78`
-- **Verified Contract:** https://sepolia.basescan.org/address/0x50b0a6391bb06cc0c7a228d41352ee91d496ae78
+- **Verified Contract:** https://sepolia.basescan.org/address/0xbC79b4a96186b0AFE09Ee83830e2Fb30E14d5Ddc
 
 For questions about specific functions, refer to the NatSpec documentation in `QubicBridge.sol`.
 
@@ -630,7 +630,7 @@ Address: 0x5438615E84178C951C0EB84Ec9Af1045eA2A7C78
 Explorer: https://base-sepolia.blockscout.com/address/0x5438615e84178c951c0eb84ec9af1045ea2a7c78
 QubicBridge (con Multisig) ✅
 Address: 0x50B0A6391BB06cc0C7a228D41352EE91d496aE78 
-Explorer: https://base-sepolia.blockscout.com/address/0x50B0A6391BB06cc0C7a228D41352EE91d496aE78 
+Explorer: https://sepolia.basescan.org/address/0xbC79b4a96186b0AFE09Ee83830e2Fb30E14d5Ddc
 Configuración:
 Network: Base Sepolia (Chain ID: 84532)
 Base Fee: 2% (200 basis points)
