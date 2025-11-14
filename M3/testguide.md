@@ -19,15 +19,15 @@
 
 #### Admin 1
 - **Address**: `XABEFABIHWRWBAIJQJPWTIIQBUCBHBVWYYGFFJADQBKWFBORRVXWSCVBUKWL`
-- **Private Key**: `jbwdfpzapmiugeekuriswdascxbfvrywoivfmlucmfrorftajnqzmgedcsck`
+- **Seed**: `xfccearcehvadeokstomhjsyqaudyhkngbmlwvsxsppexhlhdvijyaq`
 
 #### Admin 2
 - **Address**: `EQMBBVYGZOFUIHEXFOXKTFTANEKBXLBXHAYDFFMREEMRQEVADYMMEWACTODD`
-- **Private Key**: `ypvzxmojukesfauqwypxatozxdnbzgbohpcguxdamfbxijtszbgewgmccofc`
+- **Seed**: `xpsxzzfqvaohzzwlbofvqkqeemzhnrscpeeokoumekfodtgzmwghtqm`
 
 #### Admin 3
 - **Address**: `HYJXEZSECWSKODJALRCKSLKVYUEBMAHDODYZUJIIYDPAGFKLMOTHTJXEBEWM`
-- **Private Key**: `junhgiruoegadcjgprphxiunibvdgrtalwuogsvrpbywkjagpnelyngenjka`
+- **Seed**: `ukzbkszgzpipmxrrqcxcppumxoxzerrvbjgthinzodrlyblkedutmsy`
 
 ### Managers (1 wallet)
 
